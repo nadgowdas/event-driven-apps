@@ -9,9 +9,13 @@ RUN   cd ui \
       && ng build \
       && cd ../server \
       && npm install \
-      && npm run build
+#GITSECURE REMEDIATION 
+RUN  apk update && apk add  
 
-FROM node:alpine
+
+#GITSECURE REMEDIATION 
+RUN  apt-get update && apt-get install -y --fix-missing  
+
 MAINTAINER https://github.com/ibm-cloud-architecture - IBM - Jerome Boyer
 
 WORKDIR /kc-ui/server

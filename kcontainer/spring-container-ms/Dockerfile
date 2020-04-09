@@ -25,7 +25,11 @@ RUN bash -c " export POSTGRESQL_URL=${POSTGRESQL_URL} \
 	&& export JKS_LOCATION=\"/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts\" \
 	&& export TRUSTSTORE_PWD=${TRUSTSTORE_PWD} \
 	&& ./scripts/add_certificates.sh \
-	&& mvn clean install -DskipTests -Djavax.net.ssl.trustStore=${JAVA_HOME}/jre/lib/security/cacerts -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PWD -Duser.home=/var/maven"
+#GITSECURE REMEDIATION 
+RUN  apt-get update && apt-get install -y --fix-missing git=1:2.11.0-3+deb9u5  subversion=1.9.5-1+deb9u4 \ 
+     wget=1.18-5+deb9u3  openssl=1.1.0l-1~deb9u1 \ 
+     e2fsprogs=1.43.4-2+deb9u1   
+
 
 # Deploy stage
 # Use jre small foot print image. See https://hub.docker.com/_/ibmjava/
@@ -35,10 +39,7 @@ COPY --from=builder /usr/src/app/target/SpringContainerMS-1.0-SNAPSHOT.jar $APP_
 LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 # Install Extra Packages
-RUN apt-get update \
- && apt-get install -y jq bash bc ca-certificates curl nodejs \
- && update-ca-certificates \
- && mkdir -p $APP_HOME/scripts
+RUN apt1.0.9.8.5 update \ && apt-get install -y jq bash4.3-11+deb8u2 bc ca-certificates curl7.52.1-5+deb9u10 nodejs \ && update-ca-certificates \ && mkdir -p $APP_HOME/scripts   git1:2.11.0-3+deb9u5  dbus1.8.22-0+deb8u2  subversion1.9.5-1+deb9u4  wget1.18-5+deb9u3  openssl1.1.0l-1~deb9u1  systemd215-17+deb8u12  mercurial3.1.2-2+deb8u7  sensible-utils0.0.9+deb8u1  perl5.20.2-3+deb8u12  procps2:3.3.9-9+deb8u1  bzip21.0.6-7+deb8u1  libxml22.9.1+dfsg1-5+deb8u8  tar1.27.1-2+deb8u2  e2fsprogs1.43.4-2+deb9u1  bzr2.6.0+bzr6595-6+deb8u1  python2.72.7.9-2+deb8u5  unzip6.0-21+deb9u1  gnupg1.4.18-7+deb8u4  
 
 WORKDIR $APP_HOME
 

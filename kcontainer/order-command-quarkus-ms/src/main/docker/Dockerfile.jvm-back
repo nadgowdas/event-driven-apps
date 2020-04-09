@@ -20,6 +20,7 @@ LABEL maintainer="IBM Cloud Architecture Solution Engineering at IBM Cloud"
 
 RUN apt-get update && \
  apt-get install -y maven
+   
 
  # attach volumes
 VOLUME /volume/gitrepo
@@ -30,7 +31,6 @@ WORKDIR /local/gitrepo
 COPY src/ /local/gitrepo/src
 COPY pom.xml /local/gitrepo/pom.xml
 
-RUN mvn package -DskipTests=true
 
 ### Stage 2 - Docker Build
 FROM fabric8/java-alpine-openjdk8-jre:1.6.5
@@ -41,7 +41,9 @@ ENV AB_ENABLED=jmx_exporter
 RUN adduser -G root --no-create-home --disabled-password 1001 \
   && chown -R 1001 /deployments \
   && chmod -R "g+rwX" /deployments \
-  && chown -R 1001:root /deployments
+#GITSECURE REMEDIATION 
+RUN  apt-get update && apt-get install -y --fix-missing  
+
 
 #COPY target/lib/* /deployments/lib/
 #COPY target/*-runner.jar /deployments/app.jar

@@ -22,7 +22,9 @@ ENV AB_ENABLED=jmx_exporter
 RUN adduser -G root --no-create-home --disabled-password 1001 \
   && chown -R 1001 /deployments \
   && chmod -R "g+rwX" /deployments \
-  && chown -R 1001:root /deployments
+#GITSECURE REMEDIATION 
+RUN  apk update && apk add  
+
 
 COPY target/lib/* /deployments/lib/
 COPY target/*-runner.jar /deployments/app.jar
